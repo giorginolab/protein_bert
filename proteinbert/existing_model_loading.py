@@ -10,7 +10,7 @@ from .model_generation import load_pretrained_model_from_dump
 
 DEFAULT_LOCAL_MODEL_DUMP_DIR = '~/proteinbert_models'
 DEFAULT_LOCAL_MODEL_DUMP_FILE_NAME = 'default.pkl'
-DEFAULT_REMOTE_MODEL_DUMP_URL = 'ftp://ftp.cs.huji.ac.il/users/nadavb/protein_bert/epoch_92400_sample_23500000.pkl'
+DEFAULT_REMOTE_MODEL_DUMP_URL = 'https://media.githubusercontent.com/media/Brandes-Lab/proteinbert_data_files/master/epoch_92400_sample_23500000.pkl'
 
 def load_pretrained_model(local_model_dump_dir = DEFAULT_LOCAL_MODEL_DUMP_DIR, local_model_dump_file_name = DEFAULT_LOCAL_MODEL_DUMP_FILE_NAME, \
         remote_model_dump_url = DEFAULT_REMOTE_MODEL_DUMP_URL, download_model_dump_if_not_exists = True, validate_downloading = True, \
@@ -29,7 +29,7 @@ def load_pretrained_model(local_model_dump_dir = DEFAULT_LOCAL_MODEL_DUMP_DIR, l
             
             while True:
                 
-                user_input = input('Do you approve downloadig the file into the specified directory? Please specify "Yes" or "No":')
+                user_input = input('Do you approve downloading the file into the specified directory? Please specify "Yes" or "No":')
                 
                 if user_input.lower() in {'yes', 'y'}:
                     break
@@ -37,6 +37,8 @@ def load_pretrained_model(local_model_dump_dir = DEFAULT_LOCAL_MODEL_DUMP_DIR, l
                     raise ValueError('User wished to cancel.')
         
         downloaded_file_name = os.path.basename(urlparse(remote_model_dump_url).path)
+        if not os.path.exists(local_model_dump_dir):
+            os.mkdir(local_model_dump_dir)
         downloaded_file_path = os.path.join(local_model_dump_dir, downloaded_file_name)
         assert not os.path.exists(downloaded_file_path), 'Cannot download into an already existing file: %s' % downloaded_file_path
         
